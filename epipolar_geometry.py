@@ -16,6 +16,7 @@ def arguments_parser():
         help="The name of first image (give only the number eg 1 or 2)")
     parser.add_argument("--image2number",default="3",
         help="The name of first image (give only the number eg 1 or 2)")
+    parser.add_argument("--resize",type=bool,default=True,help="resizes the image for faster computation")
     args = parser.parse_args()
 
     return args
@@ -32,8 +33,9 @@ def load_image(args):
     filename2=image2name.zfill(8)
     img1=cv2.imread(Image_Folderpath+filename1+".jpg")
     img2=cv2.imread(Image_Folderpath+filename2+".jpg")
-    img1=cv2.resize(img1,(1080,540))
-    img2=cv2.resize(img2,(1080,540))
+    if args.resize:
+        img1=cv2.resize(img1,(1080,540))
+        img2=cv2.resize(img2,(1080,540))
     return img1, img2
     
 
@@ -67,17 +69,16 @@ def rotation_matrix(axis, theta):
 
 def click(event, x, y,flags, param):
     if event == cv2.EVENT_LBUTTONDOWN:
-        #Loading the R and t for image 0
+        #Loading the R and t for image 1
         R1,t1=loadExtrinsicFile(extrinsic_Folderpath+filename1+".extr")
         #Loading the R and t for image 2
         R2,t2=loadExtrinsicFile(extrinsic_Folderpath+filename2+".extr")
         R=np.dot(R1.T,R2)
-        #t vector is from image 0 to image 1
-        t=np.dot(-R2,t2)
-        t=t+t1
-        t/=np.sqrt(np.dot(t, t))
-        
-
+        #t vector is always pointing outside from image 0 so, to calculate the t vector from Image 2 to Image 0, 
+        t0=np.dot(-R2,t2)
+        #From Image0, we have to translate to Image 1. For this, we add t1 vector to t vector to get final t vector
+        t=t0+t1
+        t/=np.sqrt(np.dot(t, t))  #Normalizing the t vector
         #Converting the pixel co-ordinates into cartesian coordinates
         x_vector=np.asanyarray(cc.sphereMapCoordsToUnitCartesian(cc, x, y, imgWidth, imgHeight))  
         x_prime_vector=np.matmul(R,x_vector)
@@ -100,10 +101,11 @@ def click2(event, x, y,flags, param):
         #Loading the R and t for the image 2
         R1,t1=loadExtrinsicFile(extrinsic_Folderpath+filename1+".extr")
         R=np.dot(R2.T,R1)
-        #t vector is from image 0 to image 1
-        t=np.dot(-R1,t1)
-        t=t+t2
-        t/=np.sqrt(np.dot(t, t))
+        #t vector is always pointing outside from image 0 so, to calculate the t vector from Image 1 to Image 0
+        t0=np.dot(-R1,t1)
+        #From Image0, we have to translate to Image 1. For this, we add t1 vector to t vector to get final t vector
+        t=t0+t2
+        t/=np.sqrt(np.dot(t, t))        #Normalizing the t vector
         #Converting the pixel co-ordinates into cartesian coordinates
         x_vector=np.asanyarray(cc.sphereMapCoordsToUnitCartesian(cc, x, y, imgWidth, imgHeight)) 
         x_prime_vector=np.matmul(R,x_vector)
