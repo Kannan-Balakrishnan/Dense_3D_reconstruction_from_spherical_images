@@ -2,7 +2,7 @@ import numpy as np
 import cv2
 import math
 import argparse
-from coordinateconversion import CoordinateConversions as cc
+from coordinateconversion import CoordinateConversions
 
 def arguments_parser():
     parser=argparse.ArgumentParser()
@@ -80,7 +80,7 @@ def click(event, x, y,flags, param):
         t=t0+t1
         t/=np.sqrt(np.dot(t, t))  #Normalizing the t vector
         #Converting the pixel co-ordinates into cartesian coordinates
-        x_vector=np.asanyarray(cc.sphereMapCoordsToUnitCartesian(cc, x, y, imgWidth, imgHeight))  
+        x_vector=np.asanyarray(coord_convert.sphereMapCoordsToUnitCartesian( x, y, imgWidth, imgHeight))  
         x_prime_vector=np.matmul(R,x_vector)
         normal_vector=np.cross(t, x_prime_vector) / np.linalg.norm(np.cross(t, x_prime_vector))  
         rotation_matrix_normalvec=rotation_matrix(normal_vector,2*math.pi/divisions)
@@ -88,7 +88,7 @@ def click(event, x, y,flags, param):
         for i in range(divisions):  #divisions
             rotated_transvec=np.dot(rotation_matrix_normalvec,rotated_transvec)
             #converting back to sphere map coordinates
-            arc_Pixel=np.round(cc.unitCartesianToSphereMapCoords(cc, rotated_transvec, imgWidth,imgHeight))
+            arc_Pixel=np.round(coord_convert.unitCartesianToSphereMapCoords(rotated_transvec, imgWidth,imgHeight))
             cv2.circle(img2, (int(arc_Pixel[0]),int(arc_Pixel[1])), radius=1, color=(0, 255, 0), thickness=-1)
         cv2.imshow("image2",img2)
         cv2.waitKey(0)
@@ -107,7 +107,7 @@ def click2(event, x, y,flags, param):
         t=t0+t2
         t/=np.sqrt(np.dot(t, t))        #Normalizing the t vector
         #Converting the pixel co-ordinates into cartesian coordinates
-        x_vector=np.asanyarray(cc.sphereMapCoordsToUnitCartesian(cc, x, y, imgWidth, imgHeight)) 
+        x_vector=np.asanyarray(coord_convert.sphereMapCoordsToUnitCartesian(x, y, imgWidth, imgHeight)) 
         x_prime_vector=np.matmul(R,x_vector)
         normal_vector=np.cross(t, x_prime_vector) / np.linalg.norm(np.cross(t, x_prime_vector))  
         rotation_matrix_normalvec=rotation_matrix(normal_vector,2*math.pi/divisions)
@@ -115,7 +115,7 @@ def click2(event, x, y,flags, param):
         for i in range(divisions):  #divisions
             rotated_transvec=np.dot(rotation_matrix_normalvec,rotated_transvec)
             #converting back to sphere map coordinates
-            arc_Pixel=np.round(cc.unitCartesianToSphereMapCoords(cc, rotated_transvec, imgWidth,imgHeight))
+            arc_Pixel=np.round(coord_convert.unitCartesianToSphereMapCoords(rotated_transvec, imgWidth,imgHeight))
             cv2.circle(img1, (int(arc_Pixel[0]),int(arc_Pixel[1])), radius=1, color=(0, 255, 0), thickness=-1)
         cv2.imshow("image1",img1)
         cv2.waitKey(0)
@@ -123,12 +123,13 @@ def click2(event, x, y,flags, param):
 
 
 def main():
-    global divisions, img1, img2, imgWidth, imgHeight
+    global divisions, img1, img2, imgWidth, imgHeight, coord_convert
     args=arguments_parser()
     divisions=args.divisions
     img1,img2=load_image(args)
     #Getting the shape of the image
     imgHeight,imgWidth,channels=img1.shape
+    coord_convert=CoordinateConversions()
     #Displaying the image
     cv2.namedWindow("image1")
     cv2.namedWindow("image2")
