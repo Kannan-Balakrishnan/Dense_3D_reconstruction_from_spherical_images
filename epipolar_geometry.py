@@ -12,7 +12,7 @@ def arguments_parser():
            help="Divide 360 degrees by number of divisions to get angle of rotation around normal axis")
     parser.add_argument("--reference_image_number",default="0",
            help="The name of the reference image (all Rotations and translations are with respect to the reference image")
-    parser.add_argument("--image1number",default="1",
+    parser.add_argument("--image1number",default="5",
         help="The name of first image (give only the number eg 1 or 2)")
     parser.add_argument("--image2number",default="3",
         help="The name of first image (give only the number eg 1 or 2)")
@@ -73,11 +73,11 @@ def click(event, x, y,flags, param):
         R1,t1=loadExtrinsicFile(extrinsic_Folderpath+filename1+".extr")
         #Loading the R and t for image 2
         R2,t2=loadExtrinsicFile(extrinsic_Folderpath+filename2+".extr")
-        R=np.dot(R1.T,R2)
-        #t vector is always pointing outside from image 0 so, to calculate the t vector from Image 2 to Image 0, 
-        t0=np.dot(-R2,t2)
+        R=np.dot(R2,R1.T)
+        #t vector is always pointing outside from image 0 so, to calculate the t vector from Image 2 to Image 0,
+        t=np.dot(R2,(t2-t1))
         #From Image0, we have to translate to Image 1. For this, we add t1 vector to t vector to get final t vector
-        t=t0+t1
+        
         t/=np.sqrt(np.dot(t, t))  #Normalizing the t vector
         #Converting the pixel co-ordinates into cartesian coordinates
         x_vector=np.asanyarray(coord_convert.sphereMapCoordsToUnitCartesian( x, y, imgWidth, imgHeight))  
@@ -100,12 +100,13 @@ def click2(event, x, y,flags, param):
         R2,t2=loadExtrinsicFile(extrinsic_Folderpath+filename2+".extr")
         #Loading the R and t for the image 2
         R1,t1=loadExtrinsicFile(extrinsic_Folderpath+filename1+".extr")
-        R=np.dot(R2.T,R1)
+        R=np.dot(R1,R2.T)
         #t vector is always pointing outside from image 0 so, to calculate the t vector from Image 1 to Image 0
-        t0=np.dot(-R1,t1)
+        
+        #t=np.dot(t1+t2,R2)
         #From Image0, we have to translate to Image 1. For this, we add t1 vector to t vector to get final t vector
-        t=t0+t2
-        t/=np.sqrt(np.dot(t, t))        #Normalizing the t vector
+        t=np.dot(R1,(t1-t2))
+        t/=np.sqrt(np.dot(t, t))  
         #Converting the pixel co-ordinates into cartesian coordinates
         x_vector=np.asanyarray(coord_convert.sphereMapCoordsToUnitCartesian(x, y, imgWidth, imgHeight)) 
         x_prime_vector=np.matmul(R,x_vector)
