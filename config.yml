@@ -1,17 +1,28 @@
 IMAGE PARAMS:
   pooling_class: "icosahedron"
   n_pixels: 12288
-  depth: 3
+  depth: 4
   laplacian_type: "combinatorial"
 
 MODEL PARAMS:
-  input_channels: 3
-  output_channels: [4,4,2]
+  conv1_input_channels: 3
+  conv1_output_channels: 32
+  conv1_kernel_size: 7
+  bottleneck_layer1_input_channels: 32
+  bottleneck_layer1_kernel_size: 1
+  bottleneck_layer1_output_channels: 64
+  bottleneck_layer2_kernel_size: 3
+  bottleneck_layer2_output_channels: 96
+  bottleneck_layer3_kernel_size: 1
+  conv2_input_channels: 96
+  conv2_kernel_size: 3
+  conv2_output_channels: 3
+  norm_fn: "batch"
   partition: [0.7,0.2,0.1]
   batch_size: 64
   learning_rate: 0.001
   n_epochs: 30
-  kernel_size: 3
+  
 
 SAVING:
   path_to_data: "/data/climate/data_5_all"
