@@ -1,16 +1,16 @@
 IMAGE PARAMS:
   pooling_class: "icosahedron"
   n_pixels: 12288
-  depth: 4
+  depth: 3
   laplacian_type: "combinatorial"
 
 MODEL PARAMS:
   conv1_input_channels: 3
   conv1_output_channels: 32
   conv1_kernel_size: 7
-  bottleneck_layer1_input_channels: 32
+  bottleneck_layer_input_channels: [32,64,96]
   bottleneck_layer1_kernel_size: 1
-  bottleneck_layer1_output_channels: 64
+  bottleneck_layer_output_channels: [64,96]
   bottleneck_layer2_kernel_size: 3
   bottleneck_layer2_output_channels: 96
   bottleneck_layer3_kernel_size: 1
