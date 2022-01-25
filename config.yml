@@ -14,6 +14,7 @@ MODEL PARAMS:
   bottleneck_layer2_kernel_size: 3
   bottleneck_layer2_output_channels: 96
   bottleneck_layer3_kernel_size: 1
+  bottleneck_layer_stride: [1,2,2]
   conv2_input_channels: 96
   conv2_kernel_size: 3
   conv2_output_channels: 3

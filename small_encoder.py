@@ -38,7 +38,8 @@ class SmallEncoder(torch.nn.Module):
         self.bottlenecklayers = []
         for _ in range(params.depth):
             self.bottlenecklayers.append(self._make_layer(params, 
-                    params.bottleneck_layer_input_channels[_], itr=_))
+                    params.bottleneck_layer_input_channels[_],
+                    params.bottleneck_layer_stride[_], itr=_))
             self.bottlenecklayers.append(self.pool.pooling)
         self.bottlenecklayers = torch.nn.Sequential(*self.bottlenecklayers)
 
@@ -51,11 +52,12 @@ class SmallEncoder(torch.nn.Module):
         
             
 
-    def _make_layer(self,params, dim, itr=1):
+    def _make_layer(self,params, dim, stride, itr=1):
         params.first_layer = 1
-        layer1 = BottleneckBlock(self.in_planes, dim, params, itr)
+        layer1 = BottleneckBlock(self.in_planes, dim, params, itr,
+                        stride=stride)
         params.first_layer = 0
-        layer2 = BottleneckBlock(dim, dim, params, itr)
+        layer2 = BottleneckBlock(dim, dim, params, itr, stride=1)
         layers = (layer1, layer2)
     
         self.in_planes = dim

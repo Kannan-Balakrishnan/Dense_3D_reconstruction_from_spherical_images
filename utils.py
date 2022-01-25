@@ -25,7 +25,7 @@ class utils:
         return resolution
 
     def model_parameters(self)-> None:
-        filename="config.yml"
+        filename="./Dense_3D_reconstruction_from_spherical_images/config.yml"
         output_channels_convolutionlayer=[]
         with open(filename) as f:
             my_dict = yaml.safe_load(f)
@@ -41,6 +41,7 @@ class utils:
             self.bottleneck_layer2_kernel_size=my_dict["MODEL PARAMS"]["bottleneck_layer2_kernel_size"]
             self.bottleneck_layer2_output_channels=my_dict["MODEL PARAMS"]["bottleneck_layer2_output_channels"]
             self.bottleneck_layer3_kernel_size=my_dict["MODEL PARAMS"]["bottleneck_layer3_kernel_size"]
+            self.bottleneck_layer_stride = my_dict["MODEL PARAMS"]["bottleneck_layer_stride"]
             self.conv2_input_channels=my_dict["MODEL PARAMS"]["conv2_input_channels"]
             self.conv2_kernel_size=my_dict["MODEL PARAMS"]["conv2_kernel_size"]
             self.conv2_output_channels=my_dict["MODEL PARAMS"]["conv2_output_channels"]

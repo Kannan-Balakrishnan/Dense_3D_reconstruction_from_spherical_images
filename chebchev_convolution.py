@@ -8,7 +8,7 @@ from utils import utils
 
 torch.manual_seed(1234)
 
-data=np.load("processed_images/00000001.npy")
+data=np.load("./Dense_3D_reconstruction_from_spherical_images/processed_images/00000001.npy")
 data=torchvision.transforms.functional.to_tensor(data)
 
 class chebchevconvolution(torch.nn.Module):
