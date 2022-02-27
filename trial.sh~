@@ -1,5 +1,0 @@
-#!/bin/bash;
-echo "Hellio";
-conda activate deepspherepyg;
-python3 chebchev_convolution.py;
-conda deactivate;

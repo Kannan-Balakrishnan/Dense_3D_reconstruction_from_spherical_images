@@ -2,13 +2,13 @@ import numpy as np
 import cv2
 import math
 import argparse
-from coordinateconversion import CoordinateConversions
+from utils.coordinateconversion import CoordinateConversions
 
 def arguments_parser():
     parser=argparse.ArgumentParser()
     parser.add_argument("--image_path",default="images/" ,help="Path of the Image folder")
     parser.add_argument("--extrinsics_path",default="extrinsics/",help="Path of the extrinsics folder")
-    parser.add_argument("--divisions",default=5000,type=int,
+    parser.add_argument("--divisions",default=5,type=int,
            help="Divide 360 degrees by number of divisions to get angle of rotation around normal axis")
     parser.add_argument("--reference_image_number",default="0",
            help="The name of the reference image (all Rotations and translations are with respect to the reference image")
@@ -34,8 +34,8 @@ def load_image(args):
     img1=cv2.imread(Image_Folderpath+filename1+".jpg")
     img2=cv2.imread(Image_Folderpath+filename2+".jpg")
     if args.resize:
-        img1=cv2.resize(img1,(1080,540))
-        img2=cv2.resize(img2,(1080,540))
+        img1=cv2.resize(img1,(540,250))
+        img2=cv2.resize(img2,(540,250))
     return img1, img2
     
 

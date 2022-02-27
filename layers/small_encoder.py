@@ -3,7 +3,7 @@ import torch_geometric.nn as nn
 
 from bottleneckblock import BottleneckBlock
 from healpix_pool_unpool import Healpix
-from utils import utils
+from utils.utils import utils
 
 class SmallEncoder(torch.nn.Module):
     def __init__(self,params):

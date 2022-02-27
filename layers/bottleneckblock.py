@@ -1,6 +1,6 @@
 import torch
 import torch_geometric.nn as nn
-from utils import utils
+from utils.utils import utils
 
 class BottleneckBlock(torch.nn.Module):
     def __init__(self, in_planes, planes, params, itr, stride=1):
@@ -15,6 +15,8 @@ class BottleneckBlock(torch.nn.Module):
         
         subdivisions = int(obj.healpix_resolution_calculator(params.n_pixels)/2**itr)
         self.edge_index,self.edge_weight = obj.create_graph_func(subdivisions)
+        print (self.edge_index)
+        print (self.edge_weight)
         
         num_groups = planes // 8
         
@@ -59,7 +61,7 @@ class BottleneckBlock(torch.nn.Module):
         y = y.transpose(2, 1)
         print ("Y after convolution",y.shape)
         if self.downsample is not None:
-           x = self.downsample(x)
+           x = self.downsample(x, self.edge_index, self.edge_weight)
         print ("X after convolution",x.shape)
         return self.relu(x+y)
 

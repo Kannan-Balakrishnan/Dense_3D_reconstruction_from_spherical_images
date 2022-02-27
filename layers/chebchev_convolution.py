@@ -4,7 +4,7 @@ import numpy as np
 import yaml
 
 from small_encoder import SmallEncoder
-from utils import utils
+from utils.utils import utils
 
 torch.manual_seed(1234)
 

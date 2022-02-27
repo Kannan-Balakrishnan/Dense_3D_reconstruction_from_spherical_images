@@ -6,7 +6,7 @@ import math
 import argparse
 from pygsp.graphs.nngraphs.spherehealpix import SphereHealpix
 
-from coordinateconversion import CoordinateConversions
+from utils.coordinateconversion import CoordinateConversions
 
 
 def arguments_parser():
