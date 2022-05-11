@@ -8,8 +8,8 @@ class utils:
     def __init__(self) -> None:
         pass
 
-    def create_graph_func(self, subdivisions)-> tuple:
-        graph_pyg = from_networkx(SphereHealpix(subdivisions, nest=True, k=20).to_networkx()) 
+    def create_graph_func(self, subdivisions, k=20)-> tuple:
+        graph_pyg = from_networkx(SphereHealpix(subdivisions, nest=True, k=k).to_networkx()) 
         return (graph_pyg.edge_index, graph_pyg.weight)
 
     @staticmethod        
@@ -25,10 +25,14 @@ class utils:
         return resolution
 
     def model_parameters(self)-> None:
-        filename="./Dense_3D_reconstruction_from_spherical_images/config.yml"
+        #filename="./Dense_3D_reconstruction_from_spherical_images/config.yml"
+        filename="utils/config.yml"
         output_channels_convolutionlayer=[]
         with open(filename) as f:
             my_dict = yaml.safe_load(f)
+            self.image_path = my_dict["IMAGE PARAMS"]["image_path"]
+            self.image1number = my_dict["IMAGE PARAMS"]["image1number"]
+            self.image2number = my_dict["IMAGE PARAMS"]["image2number"]
             self.n_pixels=my_dict["IMAGE PARAMS"]["n_pixels"]
             self.norm_fn='batch'
             self.depth=my_dict["IMAGE PARAMS"]["depth"]

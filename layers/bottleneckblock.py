@@ -38,32 +38,25 @@ class BottleneckBlock(torch.nn.Module):
             self.downsample = None
 
         else:
-            self.downsample = torch.nn.Sequential(nn.ChebConv(in_planes,
-                  planes, 1), self.norm4)
+            self.downsample = nn.ChebConv(in_planes,
+                  planes, 1)
+            #self.norm4 = nn.BatchNorm(planes)
 
 
     def forward(self, x):
         y= x
-        print ("x",x.shape)
-        print ("y",y.shape)
         y = self.conv1(y, self.edge_index, self.edge_weight)
-        print(self.edge_index.shape)
-        y = y.transpose(1, 2)
-        y = self.relu(self.norm1(y))
-        y = y.transpose(2, 1)
-        y = self.conv2(y, self.edge_index, self.edge_weight)
-        y = y.transpose(1, 2)
-        y = self.relu(self.norm2(y))
-        y = y.transpose(2, 1)
-        y = self.conv3(y, self.edge_index, self.edge_weight)
-        y = y.transpose(1, 2)
-        y = self.relu(self.norm3(y))
-        y = y.transpose(2, 1)
+        y = self.relu(self.norm1(y.view(y.shape[0],y.shape[2],y.shape[1])))
+        y = self.conv2(y.transpose(2,1), self.edge_index, self.edge_weight)
+        y = self.relu(self.norm2(y.view(y.shape[0],y.shape[2],y.shape[1])))
+        y = self.conv3(y.transpose(2,1), self.edge_index, self.edge_weight)
+        y = self.relu(self.norm3(y.view(y.shape[0],y.shape[2],y.shape[1])))
         print ("Y after convolution",y.shape)
         if self.downsample is not None:
            x = self.downsample(x, self.edge_index, self.edge_weight)
+           x = self.norm4(x.transpose(1,2)).transpose(2,1)
         print ("X after convolution",x.shape)
-        return self.relu(x+y)
+        return self.relu(x+y.transpose(2,1))
 
 #params=[]
 #params.bottleneck_layer1_kernel_size=1

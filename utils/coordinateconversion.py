@@ -1,5 +1,5 @@
 import numpy as np
-from constants import Constants
+from utils.constants import Constants
 class CoordinateConversions:
 
     def __init__(self) -> None:

@@ -8,7 +8,7 @@ def arguments_parser():
     parser=argparse.ArgumentParser()
     parser.add_argument("--image_path",default="images/" ,help="Path of the Image folder")
     parser.add_argument("--extrinsics_path",default="extrinsics/",help="Path of the extrinsics folder")
-    parser.add_argument("--divisions",default=5,type=int,
+    parser.add_argument("--divisions",default=5000,type=int,
            help="Divide 360 degrees by number of divisions to get angle of rotation around normal axis")
     parser.add_argument("--reference_image_number",default="0",
            help="The name of the reference image (all Rotations and translations are with respect to the reference image")

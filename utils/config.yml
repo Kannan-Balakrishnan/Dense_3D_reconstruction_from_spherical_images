@@ -1,6 +1,9 @@
 IMAGE PARAMS:
+  image_path: "processed_images/64/"
+  image1number: 5
+  image2number: 3
   pooling_class: "icosahedron"
-  n_pixels: 12288
+  n_pixels: 49152
   depth: 3
   laplacian_type: "combinatorial"
 
@@ -17,7 +20,7 @@ MODEL PARAMS:
   bottleneck_layer_stride: [1,2,2]
   conv2_input_channels: 96
   conv2_kernel_size: 3
-  conv2_output_channels: 3
+  conv2_output_channels: 128
   norm_fn: "batch"
   partition: [0.7,0.2,0.1]
   batch_size: 64
